@@ -1,14 +1,29 @@
-import json
-import argparse
 import io
-from ibm_watson import VisualRecognitionV3
-from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
+import os
 
-authenticator = IAMAuthenticator('{api-key}')
-visual_recognition = VisualRecognitionV3(
-    version='2018-03-19',
-    authenticator=authenticator
-)
+# Imports the Google Cloud client library
+from google.cloud import vision
+from google.cloud.vision import types
+
+# Instantiates a client
+client = vision.ImageAnnotatorClient()
+
+# The name of the image file to annotate
+file_name = os.path.abspath('resources/microfosil.jpg')
+
+# Loads the image into memory
+with io.open(microfosil.jpg, 'rb') as image_file:
+    content = image_file.read()
+
+image = types.Image(content=content)
+
+# Performs label detection on the image file
+response = client.label_detection(image=image)
+labels = response.label_annotations
+
+print('Labels:')
+for label in labels:
+    print(label.description)
 
 with open('./microfosil.jpg', 'rb') as images_file:
     classes = visual_recognition.classify(
@@ -22,7 +37,7 @@ with open('./microfosil.jpg', 'rb') as images_file:
 with open('./microfosil.jpg', 'rb') as images_file:
     classes = visual_recognition.classify(
         images_file=images_file,
-        classifier_ids=["food"]).get_result()
+        classifier_ids=["fosil"]).get_result()
     print(json.dumps(classes, indent=2))
 
 
